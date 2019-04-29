@@ -8,8 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.querySelector("main").addEventListener("click", (event) => {
     if (event.target.innerText === "Add Pokemon") {
-      // console.log(event.target.dataset.trainerId)
-      addPokemon(event.target.dataset.trainerId)
+      addNewPokemon(event.target.dataset.trainerId)
         .then((pokemon) => {
           if (pokemon.error) {
             alert(`Oops, we couldn't add a new pokemon to your team because: ${pokemon.error}`)
@@ -17,15 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
           else {
             createPokemonLi(event.target.parentElement, pokemon)
           }
-          // event
         })
     }
-    else if (event.target.innerText === "Release") {
+    else if (event.target.className === "release") {
       removePokemon(event.target.dataset.pokemonId)
-        .then((pokemon) => {
+        .then( () =>
           event.target.parentElement.remove()
-        })
-    }
+        )
+      }
   })
 
 })
@@ -79,7 +77,7 @@ const createPokemonLi = (trainerCard, pokemon) => {
   trainerCard.children[2].appendChild(pokemonLi)
 }
 
-const addPokemon = (trainerId) => {
+const addNewPokemon = (trainerId) => {
   return fetch(POKEMONS_URL, {
     method: 'POST',
     headers: {
@@ -87,7 +85,7 @@ const addPokemon = (trainerId) => {
       // 'Accept': 'application/json'
     },
     body: JSON.stringify({
-      "trainer_id": trainerId
+      trainer_id: trainerId
     })
   })
   .then(resp => resp.json())
@@ -97,5 +95,4 @@ const removePokemon = (pokemonId) => {
   return fetch(`${POKEMONS_URL}/${pokemonId}`, {
     method: 'DELETE'
   })
-  .then(resp => resp.json())
 }
