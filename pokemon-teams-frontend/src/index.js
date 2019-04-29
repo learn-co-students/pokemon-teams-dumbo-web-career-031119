@@ -49,23 +49,23 @@ main.addEventListener('click', (event) => {
 
     }
 
-    if (event.target.className == 'add') {
-        console.log(event.target.parentElement)
+    // if (event.target.className == 'add') {
+    if (event.target.parentElement.childElementCount < 7)
         fetch(`${POKEMONS_URL}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    'trainer_id': event.target.dataset.id
-                })
-            }).then(resp => resp.json())
-            .then((pokInfo) => {
-                if (!!pokInfo.id) {
-                    event.target.parentElement.querySelector('ul').innerHTML += `<li>${pokInfo.nickname} (${pokInfo.species}) <button class="release" data-pokemon-id="${pokInfo.id}">Release</button></li>`
-                }
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                'trainer_id': event.target.dataset.id
             })
-    }
+        }).then(resp => resp.json())
+        .then((pokInfo) => {
+            // if (!!pokInfo.id) {
+            event.target.parentElement.querySelector('ul').innerHTML += `<li>${pokInfo.nickname} (${pokInfo.species}) <button class="release" data-pokemon-id="${pokInfo.id}">Release</button></li>`
+            // }
+        })
+}
 
 })
 
