@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert(`Oops, we couldn't add a new pokemon to your team because: ${pokemon.error}`)
           }
           else {
-            createPokemonLi(event.target.parentElement, pokemon)
+            event.target.nextElementSibling.appendChild(createPokemonLi(pokemon))
           }
         })
     }
@@ -60,11 +60,11 @@ const createTrainerCard = (trainer, pokemonArr) => {
 
 const addPokemonLis = (trainerCard, pokemonArr) => {
   pokemonArr.forEach(pokemon => {
-    createPokemonLi(trainerCard, pokemon)
+    trainerCard.children[2].appendChild(createPokemonLi(pokemon))
   })
 }
 
-const createPokemonLi = (trainerCard, pokemon) => {
+const createPokemonLi = (pokemon) => {
   let pokemonLi = document.createElement("li")
   pokemonLi.innerText = `${pokemon.nickname} (${pokemon.species})`
 
@@ -74,7 +74,7 @@ const createPokemonLi = (trainerCard, pokemon) => {
   releaseButton.innerText = "Release"
   pokemonLi.appendChild(releaseButton)
 
-  trainerCard.children[2].appendChild(pokemonLi)
+  return pokemonLi
 }
 
 const addNewPokemon = (trainerId) => {
