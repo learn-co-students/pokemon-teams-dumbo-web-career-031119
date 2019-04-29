@@ -28,7 +28,6 @@ const getPoks = () => {
         });
     })
 }
-
 // postPok
 
 getPoks()
@@ -36,9 +35,9 @@ getPoks()
 main.addEventListener('click', (event) => {
 
     if (event.target.className == 'release') {
-        console.log(event.target.dataset.id)
+        event.target.parentElement.remove()
         fetch(`${POKEMONS_URL}/${event.target.dataset.id}`, {
-            method: 'POST',
+            method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json'
@@ -46,23 +45,30 @@ main.addEventListener('click', (event) => {
             body: JSON.stringify({
                 'trainer_id': `${event.target.dataset.id}`
             })
-        }).then(getPoks)
+        })
+
     }
 
     if (event.target.className == 'add') {
-        console.log(event.target.dataset.id)
+        console.log(event.target.parentElement)
         fetch(`${POKEMONS_URL}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'trainer_id': event.target.dataset.id
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'trainer_id': event.target.dataset.id
+                })
+            }).then(resp => resp.json())
+            .then((pokInfo) => {
+                if (!!pokInfo.id) {
+                    event.target.parentElement.querySelector('ul').innerHTML += `<li>${pokInfo.nickname} (${pokInfo.species}) <button class="release" data-pokemon-id="${pokInfo.id}">Release</button></li>`
+                }
             })
-        }).then(getPoks)
     }
 
 })
+
 
 // Whenever a user hits Add Pokemon and they have space on their team, they should get a new Pokemon.
 // Whenever a user hits Release Pokemon on a specific Pokemon team, that specific Pokemon should be released from the team.
